@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+html,
+body,
+#root {
+  background-color: #020617;
+  color: #f8fafc;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom scrollbars for internal scrollable elements */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Cinematic Cosmic & Cityscape Drift Animations */
+@keyframes cosmicDrift {
+  0% {
+    transform: scale(1.02) translate(0px, 0px);
+  }
+  50% {
+    transform: scale(1.09) translate(-1.5%, -1%);
+  }
+  100% {
+    transform: scale(1.04) translate(1%, 0.8%);
+  }
+}
+
+@keyframes slowZoomCity {
+  0% {
+    transform: scale(1.0) translate(0px, 0px);
+  }
+  50% {
+    transform: scale(1.12) translate(-0.8%, -0.5%);
+  }
+  100% {
+    transform: scale(1.0) translate(0px, 0px);
+  }
+}
+
+@keyframes bokehPulse {
+  0%, 100% {
+    transform: scale(1.0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.85;
+  }
+}
+
+@keyframes rainGlassSheen {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.6));
+  }
+}
+
+/* Glassmorphic card surface for high-contrast readability against cosmic backdrop */
+.cosmic-surface {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.cosmic-surface-glow {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 10px 30px -10px rgba(2, 6, 23, 0.8), 0 0 20px -5px rgba(6, 182, 212, 0.15);
+}
+
+/* Print Stylesheet for clean browser PDF export */
+@media print {
+  body, html, #root {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  header, nav, footer, button, .no-print, [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  /* Printable Audit Card Styles */
+  .print-surface {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "ChronoGraph: Autonomous Breaking-Change Sentinel",
+  "description": "Autonomous cross-system breaking-change sentinel for Sanity CMS structured content, APIs, and multi-hop dependencies with MCP context traversal and Gemini reasoning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
