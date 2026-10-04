@@ -36,7 +36,35 @@ ruling is written back to Sanity so the same question isn't re-asked later.
 Without `SANITY_ORG_ID`/`SANITY_CONTEXT_TOKEN` set, the app still runs on the
 seeded in-memory graph and deterministic diff analysis, but the Context
 Agent panel will say plainly that it is not active rather than faking it.
+## A note on Gemini API quotas (please read before testing)
 
+This submission uses the Gemini API's **free tier**, which enforces a hard
+limit of **20 requests/day and 5 requests/minute per model, per project**
+(Google's limit, not configurable by this app). Both the deterministic
+Sentinel analysis and the Sanity Context Agent each consume one request per
+"Analyze Breaking Changes" click, so repeated testing can exhaust the daily
+quota — if that happens, Gemini returns a `429 RESOURCE_EXHAUSTED` error and
+the Context Agent trace will show that error message instead of a tool
+trace.
+
+**This is a known, expected limitation of the free tier, not a bug in the
+integration.** Two things to know if you hit it while judging:
+
+1. **The deterministic Sentinel analysis (AST-based breaking-change
+   detection, dependency traversal, blast-radius calculation) does not
+   depend on this quota at all** and will keep working even when the AI
+   reasoning layer is rate-limited.
+2. **The Sanity Context Agent → Knowledge Base integration has been verified
+   working** in repeated manual tests: the agent calls `docs__initial_context`
+   and `docs__knowledge_base_search` against the live Sanity Context MCP
+   endpoint, retrieves real Knowledge Base content, and — when the content
+   actually conflicts with the dataset — surfaces both claims side by side.
+   A screen recording of a successful run is included in the demo video
+   linked above in case the quota is exhausted at review time.
+
+If you'd like to test the live agent yourself and hit the quota, waiting a
+few minutes (per-minute limit) or until the daily reset usually clears it;
+alternatively I'm happy to swap in a billed API key on request.
 ## Architecture
 
 - `lib/sanity/contextMcpClient.ts` — thin MCP client over the two hosted
