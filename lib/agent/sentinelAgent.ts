@@ -158,14 +158,13 @@ export async function runContextAgent(opts: {
     const hasDocs = activeKinds.includes('docs') && !!clients.docs;
     const systemInstruction = `You are ChronoGraph, a breaking-change sentinel. You have NO built-in knowledge of this company's services.
 Everything must come from tools:
-${hasGraph ? '- graph__* tools query the live Sanity dataset with GROQ: services, apiEndpoint contracts (fieldContracts, consumers).\n' : ''}${hasDocs ? '- docs__* tools read a Knowledge Base of OpenAPI specs, consumer changelogs and runbooks (call docs__initial_context first to see the outline, then docs__knowledge_base_read with paths copied verbatim; read several relevant paths in one call).\n' : ''}
+${hasGraph ? '- graph__* tools query the live Sanity dataset with GROQ: services, apiEndpoint contracts (fieldContracts, consumers).\n' : ''}${hasDocs ? '- docs__* tools read a Knowledge Base of OpenAPI specs, consumer changelogs and runbooks (call docs__initial_context first to see the outline, then docs__knowledge_base_read with paths copied verbatim; read several relevant paths in one call). docs__knowledge_base_search uses EXACT keyword matching, not semantic search — a camelCase field name like "taxId" will often NOT match because the indexer tokenizes it as separate words. If a search for the exact field name returns "No entries matched", immediately retry with the words split and lowercased (e.g. "taxId" -> "tax id", "billingCycleAnchor" -> "billing cycle anchor"), then with a broader topic word (e.g. "billing", "nullable", "required"), before giving up on that field.\n' : ''}
 ${hasGraph
   ? 'Procedure: 1) query the graph for the target service, its endpoints and consumers of every field the diff touches; 2) read the KB entries about those fields and consumers; 3) compare. When the dataset and a document, or two documents, disagree about a field (nullability, type, unit, required, deprecation window), do NOT pick a side: report both claims with their sources.'
   : 'The dataset endpoint is not connected in this run; the deterministic diff findings already supplied are your only structured-data source. Use the docs tools to read the OpenAPI spec, consumer changelogs and runbooks about the fields in the diff. When two documents disagree about a field (nullability, type, unit, required, deprecation window), do NOT pick a side: report both claims with their sources.'}
 
 Rulings already made by humans (treat as settled, do not re-raise):
 ${decided}
-
 Finish with a short plain-text impact summary, then ONE fenced json block:
 \`\`\`json
 {"summary":"...","findings":["..."],"contradictions":[{"field":"fieldName","attribute":"nullability|type|unit|required|deprecation|other","claimA":{"text":"...","source":"doc path or dataset _id"},"claimB":{"text":"...","source":"..."}}]}
