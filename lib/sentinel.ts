@@ -109,7 +109,7 @@ export async function analyzeDiffWithSentinel(
   let patchCode = '';
   let rollbackPlan = '';
   let tokensConsumed = 0;
-  let modelUsed = 'gemini-2.5-flash';
+  let modelUsed = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   let liveApiExecuted = false;
 
   const defaultBField = breakages[0]?.fieldName || 'paymentMethodId';
@@ -173,7 +173,7 @@ export async function analyzeDiffWithSentinel(
 
       // Official call with gemini-2.5-flash, system instruction, and structured JSON output
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
         contents: structuredPrompt,
         config: {
           systemInstruction,
